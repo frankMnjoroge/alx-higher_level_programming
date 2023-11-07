@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <Python.h>
 /**
- * print_python_list_info - prints some basic info about Python lists
+ * print_python_list_info - function that prints some basic info about Python lists
  * @p: contain python list
  */
 void print_python_list_info(PyObject *p)
@@ -14,4 +14,3 @@ void print_python_list_info(PyObject *p)
 	for (elemnt = 0; elemnt < Py_SIZE(p); elemnt++)
 		printf("Element %d: %s\n", elemnt, Py_TYPE(PyList_GetItem(p, elemnt))->tp_name);
 }
-
