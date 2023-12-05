@@ -1,5 +1,4 @@
 #include "hash_tables.h"
-
 shash_table_t *shash_table_create(unsigned long int size);
 int shash_table_set(shash_table_t *ht, const char *key, const char *value);
 char *shash_table_get(const shash_table_t *ht, const char *key);
@@ -17,7 +16,7 @@ void shash_table_delete(shash_table_t *ht);
 shash_table_t *shash_table_create(unsigned long int size)
 {
 	shash_table_t *ht;
-	unsigned long int y;
+	unsigned long int i;
 
 	ht = malloc(sizeof(shash_table_t));
 	if (ht == NULL)
@@ -27,7 +26,7 @@ shash_table_t *shash_table_create(unsigned long int size)
 	ht->array = malloc(sizeof(shash_node_t *) * size);
 	if (ht->array == NULL)
 		return (NULL);
-	for (y = 0; y < size; y++)
+	for (i = 0; i < size; i++)
 		ht->array[i] = NULL;
 	ht->shead = NULL;
 	ht->stail = NULL;
@@ -47,14 +46,14 @@ shash_table_t *shash_table_create(unsigned long int size)
 int shash_table_set(shash_table_t *ht, const char *key, const char *value)
 {
 	shash_node_t *new, *tmp;
-	char *val_copy;
+	char *value_copy;
 	unsigned long int index;
 
 	if (ht == NULL || key == NULL || *key == '\0' || value == NULL)
 		return (0);
 
-	val_copy = strdup(value);
-	if (val_copy == NULL)
+	value_copy = strdup(value);
+	if (value_copy == NULL)
 		return (0);
 
 	index = key_index((const unsigned char *)key, ht->size);
@@ -64,7 +63,7 @@ int shash_table_set(shash_table_t *ht, const char *key, const char *value)
 		if (strcmp(tmp->key, key) == 0)
 		{
 			free(tmp->value);
-			tmp->value = val_copy;
+			tmp->value = value_copy;
 			return (1);
 		}
 		tmp = tmp->snext;
@@ -73,17 +72,17 @@ int shash_table_set(shash_table_t *ht, const char *key, const char *value)
 	new = malloc(sizeof(shash_node_t));
 	if (new == NULL)
 	{
-		free(val_copy);
+		free(value_copy);
 		return (0);
 	}
 	new->key = strdup(key);
 	if (new->key == NULL)
 	{
-		free(val_copy);
+		free(value_copy);
 		free(new);
 		return (0);
 	}
-	new->value = val_copy;
+	new->value = value_copy;
 	new->next = ht->array[index];
 	ht->array[index] = new;
 
